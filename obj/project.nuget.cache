@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "Z7xoBobsurw8BlNXEVw+OUZrZFDWHJdY7UIbbZAWSb5wFRrIIkIGjw5RkvgpWrSKd7tUIOmH5ET22/YizbLxjA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\vades\\Desktop\\Apps and Manuals\\TopSellGame\\TopSellGame.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\vades\\.nuget\\packages\\htmlagilitypack\\1.11.61\\htmlagilitypack.1.11.61.nupkg.sha512"
+  ],
+  "logs": []
+}
