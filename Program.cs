@@ -7,9 +7,9 @@ class Program
     {
         string urlTopSellGame = "https://store.steampowered.com/search/?filter=topsellers&cc=ru";
         int countGames = 10;
+
         try
         {
-            Console.Clear();
             HttpClient httpClient = new();
             using HttpClient client = httpClient;
             HttpResponseMessage response = await client.GetAsync(urlTopSellGame);
@@ -19,25 +19,25 @@ class Program
             HtmlDocument doc = new();
             doc.LoadHtml(pageContent);
 
-            var topSellNodes = doc.DocumentNode.SelectNodes("//div[@id='search_resultsRows']/a") ?? throw new ArgumentNullException("Не найдена таблица лидеров.");
+            var topSellNodes = doc.DocumentNode.SelectNodes("//div[@id='search_resultsRows']/a") ??
+                throw new ArgumentNullException("Не найдена таблица лидеров.");
 
             var topSellGameList = topSellNodes
                 .Take(countGames)
                 .Select((node, index) => new
                 {
                     rank = index + 1,
-                    gameName = node.SelectSingleNode(".//span[@class='title']")?.InnerText.Trim(),
-                    gamePrice = node.SelectSingleNode(".//div[@class='discount_final_price']")?.InnerText.Trim() ?? "Бесплатно",
-                    gameUrl = node.GetAttributeValue("href", null)
-                });
+                    gameName = node.SelectSingleNode(".//span[@class='title']")?.InnerText.Trim() ??
+                        throw new ArgumentNullException("Значение названия не может быть null."),
 
-            foreach (var gameInfo in topSellGameList)
-            {
-                if (gameInfo.gameName == null)
-                    throw new ArgumentNullException("Значение названия не может быть null.");
-                if (gameInfo.gameUrl == null)
-                    throw new ArgumentNullException("Значение ссылки не может быть null.");
-            }
+                    gamePrice = node.SelectSingleNode(".//div[@class='discount_final_price']")?.InnerText.Trim() ??
+                        node.SelectSingleNode(".//div[@class='discount_final_price free']")?.InnerText.Trim().Replace("Free", "Бесплатно") ?? 
+                        throw new ArgumentNullException("Значение цены не может быть null."),
+
+                    gameUrl = node.GetAttributeValue("href", null) ??
+                        throw new ArgumentNullException("Значение ссылки не может быть null.")
+                    
+                });
 
             int nonEmptyTopSellGameListCount = topSellGameList
                 .Where(node => !string.IsNullOrWhiteSpace(node.gameName))
@@ -50,7 +50,6 @@ class Program
             while (true)
             {
                 Console.WriteLine($"Топ-{nonEmptyTopSellGameListCount} лидеров продаж в Steam (РФ):");
-
                 foreach (var gameInfo in topSellGameList)
                     Console.WriteLine($"{gameInfo.rank,-2}. {gameInfo.gameName,-35} Стоимость - {gameInfo.gamePrice,12}");
 
