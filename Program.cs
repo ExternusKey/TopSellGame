@@ -37,7 +37,6 @@ class Program
 
 					gameUrl = node.GetAttributeValue("href", null) ??
 						throw new ArgumentNullException("Значение ссылки не может быть null.")
-
 				});
 
 			int nonEmptyTopSellGameListCount = topSellGameList
